@@ -44,7 +44,7 @@ public class SetBlocks : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDr
             GameManager.Resource.Destroy(dragObject.gameObject);
             dragObject = null;
         }
-        Debug.Log($"{GameManager.Data.mapData.platform_name.Count} vs {GameManager.Data.savedMapData.platform_name.Count}");
+        Debug.Log($"{GameManager.Data.mapData.platform_index_name.Count} vs {GameManager.Data.savedMapData.platform_index_name.Count}");
     }
 
     public void SetPlatform(Vector3 blockSettingPosition)

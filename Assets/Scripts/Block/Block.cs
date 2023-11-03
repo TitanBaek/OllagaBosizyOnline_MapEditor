@@ -8,6 +8,9 @@ using static UnityEngine.EventSystems.PointerEventData;
 
 public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler, IDragHandler,ISelectable
 {
+    private BlockData structBlockData;
+    public BlockData StruckBlockData { get { return structBlockData; } set { structBlockData = value; } }
+
     private List<GameObject> PlatformList { get { return GameManager.Data.PlatformList; } } // 블럭 선택에 필요한 PlatformList
 
     private bool setComplete;
@@ -32,24 +35,45 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
         blockMoved = false;
     }
 
+    private void OnEnable()
+    {
+        //오브젝트 이름 변경 전 구조체에 데이터 입력
+        if (structBlockData.index_name != null)
+        {
+            Debug.Log($"초기화 미진행 {structBlockData.index_name}");
+            return;
+        }
+        else
+        {
+            InitBlockData();
+        }
+    }
+
+    public void InitBlockData(BlockData blockData)
+    {
+        this.gameObject.name = blockData.index_name;
+        structBlockData = blockData;
+    }
+
+    public void InitBlockData()
+    {
+        Debug.Log($"로드 된 오브젝트명{this.gameObject.name}");
+        structBlockData.Prefab_Name = gameObject.name;
+        //난수를 활용하여 오브젝트 이름 변경
+        this.gameObject.name = $"block_{Random.Range(1000, 3000)}";
+        structBlockData.index_name = gameObject.name;
+        InitBlockTransform();
+    }
+
+    public void InitBlockTransform()
+    {
+        structBlockData.platform_position = gameObject.transform.position;
+        structBlockData.platform_rotate = gameObject.transform.rotation;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        /*
-        if (eventData.button == InputButton.Left)
-        {
-            if (PlatformList != null & PlatformList.Count > 0)
-                PlatformList.Clear();
-
-            PlatformList.Add(this.gameObject);
-            // 선택갱신
-            GameManager.Data.SelectedBlocks = PlatformList.ToList();
-        }
-        if (eventData.button == InputButton.Right)
-        {
-            GameManager.Data.mapData.RemovePlatforms(this.gameObject);
-            GameManager.Data.RemovePlatform = this.gameObject;
-        }
-        */
+        Debug.Log($"선택 된 블럭의 구조체 값 {structBlockData.Prefab_Name}  {structBlockData.platform_position}  {structBlockData.platform_rotate}");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -83,6 +107,10 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
                 PlatformList.Add(this.gameObject);
                 // 선택갱신
                 GameManager.Data.SelectedBlocks = PlatformList.ToList();
+            } else
+            {
+                InitBlockTransform();
+                // mapData 갱신 필요
             }
         }
         if (eventData.button == InputButton.Right)
@@ -136,7 +164,10 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
     {
         foreach(GameObject blockobj in GameManager.Data.SelectedBlocks)
         {
+            Block block = blockobj.GetComponent<Block>();
             blockobj.transform.Translate(moveDir * Time.deltaTime * 1.2f, Space.World);
+            block.InitBlockTransform();
+            GameManager.Data.mapData.ChangePlatformsPosition(blockobj);
         }
     }
 

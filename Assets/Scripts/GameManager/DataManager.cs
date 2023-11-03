@@ -111,7 +111,7 @@ public class DataManager : MonoBehaviour
     public bool CheckMapDatas()
     {
         bool resultData = false;
-        if(Enumerable.SequenceEqual(mapData.platform_name, savedMapData.platform_name) &&
+        if(Enumerable.SequenceEqual(mapData.platform_index_name, savedMapData.platform_index_name) &&
             Enumerable.SequenceEqual(mapData.platform_pos, savedMapData.platform_pos) &&
             Enumerable.SequenceEqual(mapData.platform_rot, savedMapData.platform_rot))
         {
@@ -147,6 +147,8 @@ public class DataManager : MonoBehaviour
         if (path.Contains("New Map"))
             return;
 
+        AllDataClear();
+
         string loadJson = File.ReadAllText(path);
 
         if (currentBlocks.Count >  0)
@@ -158,12 +160,23 @@ public class DataManager : MonoBehaviour
         {
             // 화면상의 모든 블럭들을초기화
             // 맵에 플랫폼들 배치
-            for (int i = 0; i < mapData.platform_name.Count; i++)
+            for (int i = 0; i < mapData.platform_index_name.Count; i++)
             {
-                currentBlocks.Add(GameManager.Resource.Instantiate<GameObject>($"Platforms/{mapData.platform_name[i].Replace("(Clone)", "")}", mapData.platform_pos[i], mapData.platform_rot[i]));
+                BlockData innitData = new BlockData();
+                innitData.index_name = mapData.platform_index_name[i];
+                innitData.Prefab_Name = mapData.platform_prefab_name[i];
+                innitData.platform_position = mapData.platform_pos[i];
+                innitData.platform_rotate = mapData.platform_rot[i];
+                GameObject loadedBlock = GameManager.Resource.Instantiate<GameObject>($"Platforms/{mapData.platform_prefab_name[i].Replace("(Clone)", "")}", mapData.platform_pos[i], mapData.platform_rot[i]);
+                Block block = loadedBlock.GetComponent<Block>();
+                loadedBlock.gameObject.name = block.StruckBlockData.index_name;
+                block.InitBlockData(innitData);
+                //block.StruckBlockData.platform_position = new Vector3();
+                currentBlocks.Add(loadedBlock);
             }
         }
     }
+
 
     public void ClearMap()
     {
@@ -229,6 +242,13 @@ public class DataManager : MonoBehaviour
             Block block = blocks.GetComponent<Block>();
             block?.ISelected();
         }
+    }
+
+    // New Map 이나 Load로 인한 NullException 을 막기위한 블럭 선택 리스트 초기화
+    public void AllDataClear()
+    {
+        platformList.Clear();
+        selectedBlocks.Clear();
     }
 
 }

@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockData : MonoBehaviour
+public struct BlockData
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string index_name;
+    public string Prefab_Name;
+    public Vector3 platform_position;
+    public Quaternion platform_rotate;
+    public bool isGoal;
 }
