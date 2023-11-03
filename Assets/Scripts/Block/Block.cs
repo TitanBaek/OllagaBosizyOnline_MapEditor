@@ -19,7 +19,7 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
     [SerializeField] private Sprite blockIcon;
     [SerializeField] private bool isGoal;
     public Sprite BlockIcon { get { return blockIcon; } set { blockIcon = value; } }
-    public bool IsGoal { get { return isGoal; } set { isGoal = value; } }
+    public bool IsGoal { get { return isGoal; } set { structBlockData.isGoal = value; isGoal = value; } }
 
     private Vector2 prevPosition;
     private Vector2 moveDir;

@@ -170,6 +170,8 @@ public class DataManager : MonoBehaviour
                 GameObject loadedBlock = GameManager.Resource.Instantiate<GameObject>($"Platforms/{mapData.platform_prefab_name[i].Replace("(Clone)", "")}", mapData.platform_pos[i], mapData.platform_rot[i]);
                 Block block = loadedBlock.GetComponent<Block>();
                 loadedBlock.gameObject.name = block.StruckBlockData.index_name;
+                Debug.Log($"맵 데이터 골 여부 : {mapData.platform_isGoal[i]}");
+                block.IsGoal = mapData.platform_isGoal[i];
                 block.InitBlockData(innitData);
                 //block.StruckBlockData.platform_position = new Vector3();
                 currentBlocks.Add(loadedBlock);
@@ -207,7 +209,9 @@ public class DataManager : MonoBehaviour
 
         if (priorityQueue.Count > 0)
         {
+            ClearBlockGoal();
             Debug.Log($"최상위치의 오브젝트의 Y 값 : {priorityQueue.Peek().transform.position.y}");
+            mapData.SetGoal(priorityQueue.Peek().gameObject);
             return priorityQueue.Dequeue();
         }
         else
@@ -223,6 +227,16 @@ public class DataManager : MonoBehaviour
             return false;
 
         return block.SetGoal();
+    }
+
+    public void ClearBlockGoal()
+    {
+        foreach (GameObject blocks in currentBlocks)
+        {
+            Block block = blocks.GetComponent<Block>();
+            block.IsGoal = false;
+        }
+
     }
 
     public void ClearBlocksRenderer()

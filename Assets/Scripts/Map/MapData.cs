@@ -92,4 +92,21 @@ public class MapData
         platform_rot.Clear();
         platform_isGoal.Clear();
     }
+
+    public void SetGoal(GameObject obj)
+    {
+        Block block = obj.GetComponent<Block>();
+
+        ClearGoal();
+        Debug.Log($"골인 오브젝트의 인덱스 네임 {block.StruckBlockData.index_name}");
+        int index = platform_index_name.IndexOf(block.StruckBlockData.index_name);
+        platform_isGoal[index] = true;
+    }
+
+    public void ClearGoal()
+    {
+        for(int i = 0; i < platform_isGoal.Count; i++) { 
+            platform_isGoal[i] = false;
+        }
+    }
 }
