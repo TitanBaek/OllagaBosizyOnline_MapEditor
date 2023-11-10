@@ -150,6 +150,10 @@ public class DataManager : MonoBehaviour
         topMostPlatform = FindTopMostPlatform();
         SetGoalPlatform(topMostPlatform);
 
+        GameManager.Mode.Innit(); // 플레이모드 바꾸기
+
+        return;
+        
         string json = Encrypt(JsonUtility.ToJson(mapData),key128);
         SAVE_FILENAME = $"Custom_MAP_{maps.Length + 1}.json";
         File.WriteAllText($"{SAVE_DATA_DIRECTORY}{SAVE_FILENAME}", json);

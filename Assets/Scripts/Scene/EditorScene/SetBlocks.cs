@@ -21,6 +21,9 @@ public class SetBlocks : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDr
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if(GameManager.Data.EditState != EditMode.Edit)
+            return;
+
         GameManager.Data.MousePress = true;
 
         if (selectedBlock == "")  // 선택된 블럭이 없을 때 클릭한 지점에 반투명 사각 오브젝트 생성
@@ -37,6 +40,9 @@ public class SetBlocks : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDr
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (GameManager.Data.EditState != EditMode.Edit)
+            return;
+
         GameManager.Data.MousePress = false;
 
         if (selectedBlock == "")  // 선택된 블럭이 없을 때 생성된 사각형 오브젝트의 Trigger내에 있는 Platforms를 SelectedInstalledBlocks 리스트에 추가
@@ -72,6 +78,9 @@ public class SetBlocks : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDr
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (GameManager.Data.EditState != EditMode.Edit)
+            return;
+
         if (eventData.button != InputButton.Left)
             return;
 

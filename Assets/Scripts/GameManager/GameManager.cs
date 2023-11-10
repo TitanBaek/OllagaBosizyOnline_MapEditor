@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
     private static DataManager dataManager;
     public static DataManager Data { get { return dataManager; } }
 
+    private static FileManager fileManager;
+    public static FileManager File { get { return fileManager; } }
+
     private void Awake()
     {
         if (instance != null)
@@ -71,6 +74,16 @@ public class GameManager : MonoBehaviour
         dataObj.name = "DataManager";
         dataObj.transform.parent = transform;
         dataManager = dataObj.AddComponent<DataManager>();
+
+        GameObject modeObj = new GameObject();
+        modeObj.name = "ModeManager";
+        modeObj.transform.parent = transform;
+        modeManager = modeObj.AddComponent<ModeManager>();
+
+        GameObject fileObj = new GameObject();
+        fileObj.name = "FileManager";
+        fileObj.transform.parent = transform;
+        fileManager = fileObj.AddComponent<FileManager>();
 
     }
 }

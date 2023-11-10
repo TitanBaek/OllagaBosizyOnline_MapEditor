@@ -9,7 +9,7 @@ public class EditorScene : BaseScene
     {
         GameManager.Data.GetMapList();
         GameManager.Data.LoadMap(GameManager.Data._SAVE_DATA_DIRECTORY + GameManager.Data._LOAD_FILENAME);
-        
+           
     }
     
     public override void Clear()
@@ -30,7 +30,7 @@ public class EditorScene : BaseScene
     public bool InitBlockSlots()
     {
         GameManager.UI.Init();
-        GameManager.UI.BlockSlotsEnable();                                  // 블럭 슬롯 초기화 및 생성
+        GameManager.Mode.Innit();   // 컨트롤러 instantiate     
         GameManager.UI.SystemLogTextEnable();                               // 화면 중앙 텍스트 생성
         return true;
     }
