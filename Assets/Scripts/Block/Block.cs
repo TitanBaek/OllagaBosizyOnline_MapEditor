@@ -125,6 +125,9 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (GameManager.Data.EditState != EditMode.Edit)
+            return;
+
         // 현재 블럭이 선택된 경우 (PointerDown된 경우) 드래그와 함께 블럭 위치 이동
         Debug.Log($"{this.gameObject.name} 블럭이 선택되어 드래그 중");
         if(GameManager.Data.SelectedBlocks != null)
@@ -179,6 +182,5 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
         yield return new WaitForSeconds(1f);
         blockMoved = false;
         yield return null;
-
     }
 }
