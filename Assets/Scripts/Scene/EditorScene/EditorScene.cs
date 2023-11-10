@@ -9,6 +9,7 @@ public class EditorScene : BaseScene
     {
         GameManager.Data.GetMapList();
         GameManager.Data.LoadMap(GameManager.Data._SAVE_DATA_DIRECTORY + GameManager.Data._LOAD_FILENAME);
+        
     }
     
     public override void Clear()
