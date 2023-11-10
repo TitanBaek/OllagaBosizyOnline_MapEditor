@@ -6,6 +6,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     Canvas inGameCanvas;
+    Stack<PopUpUI> popUpStack;
 
     GameObject blockSlots;
     GameObject systemLog;
@@ -82,6 +83,17 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         textForSystemLog.text = "";
         systemLog.SetActive(false);
+
+    }
+
+    // Pop UI
+    public void ShowPopUpUI(string path)
+    {
+
+    }
+
+    public void ClosePopUpUI()
+    {
 
     }
 

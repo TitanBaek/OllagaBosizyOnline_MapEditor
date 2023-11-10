@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     private static SceneManager sceneManager;
     public static SceneManager Scene { get { return sceneManager; } }
 
+    private static ModeManager modeManager;
+    public static ModeManager Mode { get { return modeManager; } }
+
     private static DataManager dataManager;
     public static DataManager Data { get { return dataManager; } }
 
