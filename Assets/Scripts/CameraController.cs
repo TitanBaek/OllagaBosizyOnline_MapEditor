@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.UI;
 
+//에디터 모드에서 사용되는 카메라 컨트롤러
 public class CameraController : MonoBehaviour
 {
     [SerializeField] Texture2D cursor;
     [SerializeField] float cameraMoveSpeed;
     [SerializeField] float padding;
     [SerializeField] CinemachineVirtualCamera vcam;
-
     Vector2 mousePos;
     Vector3 cameraMoveDir;
 
