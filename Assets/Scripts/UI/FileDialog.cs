@@ -33,19 +33,4 @@ public class FileDialog : MonoBehaviour
             }
         }
     }
-
-
-    /*
-    public void OnGUI()
-    {
-        if (GUI.Button(new Rect(100,100,100,50), "FileOpen"))
-        {
-            string fileName = FileOpen();
-            if (!string.IsNullOrEmpty(fileName) )
-            {
-                Debug.Log(fileName);
-            }
-        }
-    }
-    */
 }
