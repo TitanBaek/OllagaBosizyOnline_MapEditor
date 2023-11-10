@@ -4,16 +4,27 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+using System;
 
-enum EditMode { Edit,Play};
+public enum EditMode { Edit, Play };
 public class DataManager : MonoBehaviour
 {
+    // 암호화에 사용되는 키
+    private string key128;
+
     // 현재 플레이 씬이 에디터에서 넘어온 테스트 용도인지, 메인메뉴에서 Start를 눌러 넘어온 플레이 용도인지 체크하는 부분
     private bool isTestMode;
     public bool IsTestMode { get { return isTestMode; } set { isTestMode = value; } }
 
     // 에디터 모드 
-    private EditMode editMode;
+    private EditMode editState;
+    public EditMode EditState { get { return editState; } set { editState = value; } }
+
+    // 테스트 여부
+    private bool isTestDone;
+    public bool IsTestDone { get { return isTestDone; } set { isTestDone = value; } }
 
     // 저장 불러오기 구현부
     private bool testComplete;  // 테스트 여부
@@ -76,7 +87,9 @@ public class DataManager : MonoBehaviour
     private void Awake()
     {
         selectedBlock = "";
-        editMode = EditMode.Edit;
+        editState = EditMode.Edit;
+        key128 = "3CEC2322643FC";
+        isTestDone = false;
         InitSaveLoadDatas();
     }
 
@@ -137,7 +150,7 @@ public class DataManager : MonoBehaviour
         topMostPlatform = FindTopMostPlatform();
         SetGoalPlatform(topMostPlatform);
 
-        string json = JsonUtility.ToJson(mapData);
+        string json = Encrypt(JsonUtility.ToJson(mapData),key128);
         SAVE_FILENAME = $"Custom_MAP_{maps.Length + 1}.json";
         File.WriteAllText($"{SAVE_DATA_DIRECTORY}{SAVE_FILENAME}", json);
 
@@ -154,7 +167,7 @@ public class DataManager : MonoBehaviour
 
         AllDataClear();
 
-        string loadJson = File.ReadAllText(path);
+        string loadJson = Decrypt(File.ReadAllText(path),key128);
 
         if (currentBlocks.Count >  0)
             ClearMap();
@@ -183,7 +196,6 @@ public class DataManager : MonoBehaviour
             }
         }
     }
-
 
     public void ClearMap()
     {
@@ -268,6 +280,81 @@ public class DataManager : MonoBehaviour
     {
         platformList.Clear();
         selectedBlocks.Clear();
+    }
+
+    public static string Decrypt(string textToDecrypt, string key)
+    {
+        RijndaelManaged rijndaelCipher = new RijndaelManaged();
+
+        rijndaelCipher.Mode = CipherMode.CBC;
+
+        rijndaelCipher.Padding = PaddingMode.PKCS7;
+
+        rijndaelCipher.KeySize = 128;
+
+        rijndaelCipher.BlockSize = 128;
+
+        byte[] encryptedData = Convert.FromBase64String(textToDecrypt);
+
+        byte[] pwdBytes = Encoding.UTF8.GetBytes(key);
+
+        byte[] keyBytes = new byte[16];
+
+        int len = pwdBytes.Length;
+
+        if (len > keyBytes.Length)
+
+        {
+            len = keyBytes.Length;
+        }
+
+        Array.Copy(pwdBytes, keyBytes, len);
+
+        rijndaelCipher.Key = keyBytes;
+
+        rijndaelCipher.IV = keyBytes;
+
+        byte[] plainText = rijndaelCipher.CreateDecryptor().TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+
+        return Encoding.UTF8.GetString(plainText);
+    }
+
+
+    public static string Encrypt(string textToEncrypt, string key)
+    {
+        RijndaelManaged rijndaelCipher = new RijndaelManaged();
+
+        rijndaelCipher.Mode = CipherMode.CBC;
+
+        rijndaelCipher.Padding = PaddingMode.PKCS7;
+
+        rijndaelCipher.KeySize = 128;
+
+        rijndaelCipher.BlockSize = 128;
+
+        byte[] pwdBytes = Encoding.UTF8.GetBytes(key);
+
+        byte[] keyBytes = new byte[16];
+
+        int len = pwdBytes.Length;
+
+        if (len > keyBytes.Length)
+
+        {
+            len = keyBytes.Length;
+        }
+
+        Array.Copy(pwdBytes, keyBytes, len);
+
+        rijndaelCipher.Key = keyBytes;
+
+        rijndaelCipher.IV = keyBytes;
+
+        ICryptoTransform transform = rijndaelCipher.CreateEncryptor();
+
+        byte[] plainText = Encoding.UTF8.GetBytes(textToEncrypt);
+
+        return Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
     }
 
 }

@@ -55,7 +55,6 @@ public class MapData
 
         // StructData 가져오기
         Block block = platform.GetComponent<Block>();
-
         platform_pos[index] = block.StruckBlockData.platform_position;
     }
 
@@ -96,9 +95,7 @@ public class MapData
     public void SetGoal(GameObject obj)
     {
         Block block = obj.GetComponent<Block>();
-
         ClearGoal();
-        Debug.Log($"골인 오브젝트의 인덱스 네임 {block.StruckBlockData.index_name}");
         int index = platform_index_name.IndexOf(block.StruckBlockData.index_name);
         platform_isGoal[index] = true;
     }
