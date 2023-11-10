@@ -78,7 +78,10 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
+        if (isGoal)
+        {
+            //골인 경우 플레이어가 닿았는지 확인하여 Test모드를 마치며 저장 실행.
+        }
     }
 
     public bool SetGoal()
