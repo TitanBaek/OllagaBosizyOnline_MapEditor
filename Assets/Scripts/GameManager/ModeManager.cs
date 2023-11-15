@@ -21,6 +21,8 @@ public class ModeManager : MonoBehaviour
         if(modeObj != null)
             DestroyGameModeObject();
 
+        ClearPlatforms();
+
         if (editMode == EditMode.Edit)
         {
             Debug.Log("에디트 모드로");
@@ -34,6 +36,12 @@ public class ModeManager : MonoBehaviour
             GameManager.Data.SelectedBlock = ""; // 블럭 선택 초기화
             modeObj = GameManager.Resource.Instantiate<GameObject>("Mode/PlayController",new Vector3(0,0,0),Quaternion.identity);
         }
+    }
+
+    public void ClearPlatforms()
+    {
+        GameManager.Data.ClearBlocksRenderer();
+        GameManager.Data.AllDataClear();
     }
 
     public void DestroyGameModeObject()
