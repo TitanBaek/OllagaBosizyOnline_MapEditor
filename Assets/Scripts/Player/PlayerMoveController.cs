@@ -35,13 +35,13 @@ public class PlayerMoveController : MonoBehaviour
         // 최고 속력일 경우 힘을 가해도 속력이 빨라지지 않음
         if (moveDir.x < 0 && rb.velocity.x > -maximumSpeed)
         {
-            Debug.Log("왼쪽");
+            //Debug.Log("왼쪽");
             //gfx.rotation = Quaternion.Euler(0, -90, 0);
             rb.AddForce(Vector2.right * moveDir.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
         }
         else if (moveDir.x > 0 && rb.velocity.x < maximumSpeed)
         {
-            Debug.Log("오른쪽");
+            //Debug.Log("오른쪽");
             //gfx.rotation = Quaternion.Euler(0, 90, 0);
             rb.AddForce(Vector2.right * moveDir.x * moveSpeed * Time.deltaTime, ForceMode2D.Force);
         }
@@ -54,7 +54,7 @@ public class PlayerMoveController : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
-        Debug.Log("이동");
+        //Debug.Log("이동");
         // 이동 구현
         moveDir = value.Get<Vector2>();
     }
@@ -63,7 +63,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         if (value.isPressed && isGround)
         {
-            Debug.Log("점프");
+            //Debug.Log("점프");
             DoJump();
         }
     }
@@ -79,12 +79,12 @@ public class PlayerMoveController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1f, platformLayer);
         if (hit.collider != null)
         {
-            Debug.Log("땅임");
+            //Debug.Log("땅임");
             isGround = true;
         }
         else
         {
-            Debug.Log("공중임");
+            //Debug.Log("공중임");
             isGround = false;
         }
     }
