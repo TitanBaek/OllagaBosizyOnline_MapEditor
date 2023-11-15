@@ -36,6 +36,11 @@ public class UIManager : MonoBehaviour
 
     public void BlockSlotsEnable()
     {
+        // 2개 생성되는 걸 막기위해 null이 아니면 return
+        if (blockSlots != null)
+            return;
+
+        Debug.Log("블럭 슬롯 생성");
         blockSlots = GameManager.Resource.Instantiate<GameObject>("UI/BlockSlots");
         blockSlots.transform.parent = inGameCanvas.gameObject.transform;
         SetRectTransform(blockSlots);
@@ -43,7 +48,11 @@ public class UIManager : MonoBehaviour
 
     public void BlockSlotsDisable()
     {
-        GameManager.Resource.Destroy(blockSlots);
+        if (blockSlots == null)
+            return;
+
+        Debug.Log($"Block Slot Name {blockSlots.gameObject.name}");
+        GameManager.Resource.Destroy(blockSlots.gameObject);
     }
 
     public void SystemLogTextEnable()
@@ -86,6 +95,7 @@ public class UIManager : MonoBehaviour
 
     }
 
+    /*
     // Pop UI
     public void ShowPopUpUI(string path)
     {
@@ -96,5 +106,6 @@ public class UIManager : MonoBehaviour
     {
 
     }
+    */
 
 }

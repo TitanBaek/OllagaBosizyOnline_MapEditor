@@ -14,7 +14,7 @@ public class EditorModeUI : BaseUI
         buttons["SaveButton"].onClick.AddListener(() => { ClickSaveButton(); });
         buttons["LoadButton"].onClick.AddListener(() => { ClickLoadButton(); });
         buttons["ModeButton"].onClick.AddListener(() => { ClickModeButton(); });
-    }
+    }    
 
     private void ClickNewButton()
     {
@@ -26,12 +26,29 @@ public class EditorModeUI : BaseUI
         if (isClicked)
             return;
 
+        if (GameManager.Data.CheckMapDatas())
+        {
+            Debug.Log("맵 변동사항 없음");
+            return;
+        }
+
+        Debug.Log($"테스트 여부 {GameManager.Data.IsTestDone}");
+
+        GameManager.Data.SetGoal();
+
+
         // 테스트 여부를 확인하여, 테스트 전이라면 테스트 모드로 돌입
         if (!GameManager.Data.IsTestDone)
         {
+            Debug.Log("테스트 플레이가 필요해요.");
             // Play == TestPlay
             GameManager.Data.EditState = EditMode.Play;
+            GameManager.Mode.Innit(); // 플레이모드 바꾸기
 
+            return;
+        } else
+        {
+            Debug.Log("테스트가 완료된 상태");
         }
         isClicked = true;
         GameManager.Data.SaveMap();
