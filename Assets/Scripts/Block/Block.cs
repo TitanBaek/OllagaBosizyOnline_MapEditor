@@ -40,7 +40,7 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
         //오브젝트 이름 변경 전 구조체에 데이터 입력
         if (structBlockData.index_name != null)
         {
-            Debug.Log($"초기화 미진행 {structBlockData.index_name}");
+            //Debug.Log($"초기화 미진행 {structBlockData.index_name}");
             return;
         }
         else
@@ -57,7 +57,7 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
 
     public void InitBlockData()
     {
-        Debug.Log($"로드 된 오브젝트명{this.gameObject.name}");
+        //Debug.Log($"로드 된 오브젝트명{this.gameObject.name}");
         structBlockData.Prefab_Name = this.gameObject.name;
         //난수를 활용하여 오브젝트 이름 변경
         this.gameObject.name = $"block_{Random.Range(1000, 3000)}";
@@ -74,7 +74,7 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log($"선택 된 블럭의 구조체 값 {structBlockData.Prefab_Name}  {structBlockData.platform_position}  {structBlockData.platform_rotate}");
+        //Debug.Log($"선택 된 블럭의 구조체 값 {structBlockData.Prefab_Name}  {structBlockData.platform_position}  {structBlockData.platform_rotate}");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -93,14 +93,10 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
                     > this.gameObject.transform.position.y)
                 {
                     // 플레이어 골인지점 도달, 맵 저장
-                    Debug.Log("플레이어가 위에 있다.");
                     GameManager.Data.IsTestDone = true;
                     // 세이브버튼을 통한 테스트 모드라면 저장 진행
                     if (GameManager.Mode.modeFrom == ModeFrom.SaveButton)
                         GameManager.Data.SaveMap();
-                } else
-                {
-                    Debug.Log("플레이어가 밑에 있다.");
                 }
             }
         }
@@ -154,7 +150,7 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
             return;
 
         // 현재 블럭이 선택된 경우 (PointerDown된 경우) 드래그와 함께 블럭 위치 이동
-        Debug.Log($"{this.gameObject.name} 블럭이 선택되어 드래그 중");
+        //Debug.Log($"{this.gameObject.name} 블럭이 선택되어 드래그 중");
         if(GameManager.Data.SelectedBlocks != null)
         {
             blockMoved = true;
@@ -175,7 +171,7 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
             }
         } else
         {
-            Debug.Log("NULL");
+            //Debug.Log("NULL");
         }
     }
 

@@ -36,6 +36,6 @@ public class DragObject : MonoBehaviour
     {
         // 삭제될때 DataManager에 저장된 Platform들 갱신
         GameManager.Data.SelectedBlocks = PlatformList.ToList();
-        Debug.Log($"플랫폼리스트 개수{GameManager.Data.PlatformList.Count} 셀릭티드리스트 개수:{GameManager.Data.SelectedBlocks.Count}");
+        //Debug.Log($"플랫폼리스트 개수{GameManager.Data.PlatformList.Count} 셀릭티드리스트 개수:{GameManager.Data.SelectedBlocks.Count}");
     }
 }

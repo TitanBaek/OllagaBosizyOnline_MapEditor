@@ -131,8 +131,8 @@ public class DataManager : MonoBehaviour
     // 리스트끼리 비교로 수정, json 변환후 비교와 리스트 비교중 부화가 덜한걸로 진행
     public bool CheckMapDatas()
     {
-        Debug.Log($"mapDatas {mapData.platform_index_name.Count} {mapData.platform_pos.Count} {mapData.platform_rot.Count}");
-        Debug.Log($"savedmapDatas {savedMapData.platform_index_name.Count} {savedMapData.platform_pos.Count} {savedMapData.platform_rot.Count}");
+        //Debug.Log($"mapDatas {mapData.platform_index_name.Count} {mapData.platform_pos.Count} {mapData.platform_rot.Count}");
+        //Debug.Log($"savedmapDatas {savedMapData.platform_index_name.Count} {savedMapData.platform_pos.Count} {savedMapData.platform_rot.Count}");
         
         if(Enumerable.SequenceEqual(mapData.platform_index_name, savedMapData.platform_index_name) &&
             Enumerable.SequenceEqual(mapData.platform_pos, savedMapData.platform_pos) &&
@@ -193,11 +193,11 @@ public class DataManager : MonoBehaviour
                 innitData.Prefab_Name = mapData.platform_prefab_name[i];
                 innitData.platform_position = mapData.platform_pos[i];
                 innitData.platform_rotate = mapData.platform_rot[i];
-                Debug.Log($"불러온 블럭의 로테이션 값 {innitData.platform_rotate.x} {innitData.platform_rotate.y} {innitData.platform_rotate.z}");
+                //Debug.Log($"불러온 블럭의 로테이션 값 {innitData.platform_rotate.x} {innitData.platform_rotate.y} {innitData.platform_rotate.z}");
                 GameObject loadedBlock = GameManager.Resource.Instantiate<GameObject>($"Platforms/{mapData.platform_prefab_name[i].Replace("(Clone)", "")}", mapData.platform_pos[i], mapData.platform_rot[i]);
                 Block block = loadedBlock.GetComponent<Block>();
                 loadedBlock.gameObject.name = block.StruckBlockData.index_name;
-                Debug.Log($"맵 데이터 골 여부 : {mapData.platform_isGoal[i]}");
+                //Debug.Log($"맵 데이터 골 여부 : {mapData.platform_isGoal[i]}");
                 block.IsGoal = mapData.platform_isGoal[i];
                 block.InitBlockData(innitData);
                 currentBlocks.Add(loadedBlock);
@@ -218,7 +218,7 @@ public class DataManager : MonoBehaviour
     public FileInfo[] GetMapList()
     {
         FileInfo[] files = directInfo.GetFiles("*.json");
-        Debug.Log($"{files.Length}개의 파일이 저장됨");
+        //Debug.Log($"{files.Length}개의 파일이 저장됨");
         return files;
     }
 
@@ -228,14 +228,14 @@ public class DataManager : MonoBehaviour
 
         foreach(GameObject blocks in currentBlocks)
         {
-            Debug.Log($"{blocks.name} 의 높이 값 {blocks.transform.position.y} ");
+            //Debug.Log($"{blocks.name} 의 높이 값 {blocks.transform.position.y} ");
             priorityQueue.Enqueue(blocks,blocks.transform.position.y);
         }
 
         if (priorityQueue.Count > 0)
         {
             ClearBlockGoal();
-            Debug.Log($"최상위치의 오브젝트의 Y 값 : {priorityQueue.Peek().transform.position.y}");
+            //Debug.Log($"최상위치의 오브젝트의 Y 값 : {priorityQueue.Peek().transform.position.y}");
             mapData.SetGoal(priorityQueue.Peek().gameObject);
             return priorityQueue.Dequeue();
         }
@@ -266,7 +266,7 @@ public class DataManager : MonoBehaviour
 
     public void ClearBlocksRenderer()
     {
-        Debug.Log($"{selectedBlocks.Count}");
+        //Debug.Log($"{selectedBlocks.Count}");
         foreach (GameObject blocks in selectedBlocks)
         {
             Block block = blocks.GetComponent<Block>();

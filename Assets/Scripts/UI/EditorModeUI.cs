@@ -28,11 +28,10 @@ public class EditorModeUI : BaseUI
 
         if (GameManager.Data.CheckMapDatas())
         {
-            Debug.Log("맵 변동사항 없음");
+            // 맵에 변동사항이 없다.
             return;
         }
 
-        Debug.Log($"테스트 여부 {GameManager.Data.IsTestDone}");
 
         GameManager.Data.SetGoal();
 
@@ -40,8 +39,7 @@ public class EditorModeUI : BaseUI
         // 테스트 여부를 확인하여, 테스트 전이라면 테스트 모드로 돌입
         if (!GameManager.Data.IsTestDone)
         {
-            Debug.Log("테스트 플레이가 필요해요.");
-            // Play == TestPlay
+            // 테스트 플레이가 진행되지 않았다.
             GameManager.Data.EditState = EditMode.Play;
             GameManager.Mode.SetModeFrom(ModeFrom.SaveButton);
             GameManager.Mode.Innit(); // 플레이모드 바꾸기

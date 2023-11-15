@@ -50,7 +50,7 @@ public class MapData
 
     public void ChangePlatformsPosition(GameObject platform)
     {
-        Debug.Log($"{platform.name} 이동");
+        //Debug.Log($"{platform.name} 이동");
         // 난수로 되어있는 블럭의 리스트 내 인덱스 찾기
         int index = platform_index_name.IndexOf(platform.gameObject.name);
 
@@ -61,7 +61,7 @@ public class MapData
 
     public void ChangePlatformsRotation(GameObject platform)
     {
-        Debug.Log($"{platform.name} 회전");
+        //Debug.Log($"{platform.name} 회전");
         // 난수로 되어있는 블럭의 리스트 내 인덱스 찾기
         int index = platform_index_name.IndexOf(platform.gameObject.name);
 
