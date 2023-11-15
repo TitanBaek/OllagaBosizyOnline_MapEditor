@@ -43,13 +43,11 @@ public class EditorModeUI : BaseUI
             Debug.Log("테스트 플레이가 필요해요.");
             // Play == TestPlay
             GameManager.Data.EditState = EditMode.Play;
+            GameManager.Mode.SetModeFrom(ModeFrom.SaveButton);
             GameManager.Mode.Innit(); // 플레이모드 바꾸기
-
             return;
-        } else
-        {
-            Debug.Log("테스트가 완료된 상태");
         }
+
         isClicked = true;
         GameManager.Data.SaveMap();
         StartCoroutine(SwitchClicked());
@@ -65,10 +63,17 @@ public class EditorModeUI : BaseUI
         if (isClicked)
             return;
 
+        GameManager.Data.SetGoal();
+
         if (GameManager.Data.EditState == EditMode.Play)
+        {
             GameManager.Data.EditState = EditMode.Edit;
+        }
         else
+        {
             GameManager.Data.EditState = EditMode.Play;
+            GameManager.Mode.SetModeFrom(ModeFrom.ChangeModeButton);
+        }
 
         GameManager.Mode.Innit();
         isClicked = true;

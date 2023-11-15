@@ -28,15 +28,11 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
     private bool blockMoved;   // 블럭 선택 조건부에 들어갈 isMoved 변수
     private Coroutine blockMoveCoroutine;
 
-    private bool gameDone;
-    public bool GameDone { get { return gameDone; } set { gameDone = value; } }
-
     private void Awake()
     {
         moveDir = new Vector2();
         renderers = GetComponentsInChildren<Renderer>();
         blockMoved = false;
-        gameDone = false;
     }
 
     private void OnEnable()
@@ -85,10 +81,12 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
     {
         if (isGoal)
         {
-            if (gameDone)
+            // 테스트가 완료된 상태거나, 맵에 변동이 없는 경우 아무것도 동작하지 않음.
+            if (GameManager.Data.IsTestDone || GameManager.Data.CheckMapDatas())
                 return;
+
             //골인 경우 플레이어가 닿았는지 확인하여 Test모드를 마치며 저장 실행.
-            if(collision.gameObject.tag == "Player")
+            if (collision.gameObject.tag == "Player")
             {
                 // 플레이어의 y 값과 블록의 y 값을 비교하여 
                 if(collision.gameObject.transform.position.y
@@ -97,8 +95,9 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
                     // 플레이어 골인지점 도달, 맵 저장
                     Debug.Log("플레이어가 위에 있다.");
                     GameManager.Data.IsTestDone = true;
-                    GameManager.Data.SaveMap();
-                    gameDone = true;
+                    // 세이브버튼을 통한 테스트 모드라면 저장 진행
+                    if (GameManager.Mode.modeFrom == ModeFrom.SaveButton)
+                        GameManager.Data.SaveMap();
                 } else
                 {
                     Debug.Log("플레이어가 밑에 있다.");

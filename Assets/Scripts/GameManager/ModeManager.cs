@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum ModeFrom { None,SaveButton,ChangeModeButton }
 public class ModeManager : MonoBehaviour
 {
 
     public EditMode editMode { get { return GameManager.Data.EditState; } }
     public GameObject modeObj;
-
+    public ModeFrom modeFrom;
 
     public void Innit()
     {
         Debug.Log($"{editMode} Mode Innit »£√‚");
         InnitGameModeObject();
+    }
+
+    public void SetModeFrom(ModeFrom modeFrom)
+    {
+        this.modeFrom = modeFrom;
     }
 
     public void InnitGameModeObject()
