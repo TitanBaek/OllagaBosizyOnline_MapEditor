@@ -28,11 +28,15 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
     private bool blockMoved;   // 블럭 선택 조건부에 들어갈 isMoved 변수
     private Coroutine blockMoveCoroutine;
 
+    private bool gameDone;
+    public bool GameDone { get { return gameDone; } set { gameDone = value; } }
+
     private void Awake()
     {
         moveDir = new Vector2();
         renderers = GetComponentsInChildren<Renderer>();
         blockMoved = false;
+        gameDone = false;
     }
 
     private void OnEnable()
@@ -58,17 +62,18 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
     public void InitBlockData()
     {
         Debug.Log($"로드 된 오브젝트명{this.gameObject.name}");
-        structBlockData.Prefab_Name = gameObject.name;
+        structBlockData.Prefab_Name = this.gameObject.name;
         //난수를 활용하여 오브젝트 이름 변경
         this.gameObject.name = $"block_{Random.Range(1000, 3000)}";
-        structBlockData.index_name = gameObject.name;
+        structBlockData.index_name = this.gameObject.name;
+
         InitBlockTransform();
     }
 
     public void InitBlockTransform()
     {
-        structBlockData.platform_position = gameObject.transform.position;
-        structBlockData.platform_rotate = gameObject.transform.rotation;
+        structBlockData.platform_position = this.gameObject.transform.position;
+        structBlockData.platform_rotate = this.gameObject.transform.localRotation;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -80,7 +85,25 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
     {
         if (isGoal)
         {
+            if (gameDone)
+                return;
             //골인 경우 플레이어가 닿았는지 확인하여 Test모드를 마치며 저장 실행.
+            if(collision.gameObject.tag == "Player")
+            {
+                // 플레이어의 y 값과 블록의 y 값을 비교하여 
+                if(collision.gameObject.transform.position.y
+                    > this.gameObject.transform.position.y)
+                {
+                    // 플레이어 골인지점 도달, 맵 저장
+                    Debug.Log("플레이어가 위에 있다.");
+                    GameManager.Data.IsTestDone = true;
+                    GameManager.Data.SaveMap();
+                    gameDone = true;
+                } else
+                {
+                    Debug.Log("플레이어가 밑에 있다.");
+                }
+            }
         }
     }
 
@@ -118,6 +141,9 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
         }
         if (eventData.button == InputButton.Right)
         {
+            PlatformList.Clear(); // 플랫폼 그룹 클리어
+            GameManager.Data.ClearBlocksRenderer();
+            GameManager.Data.SelectedBlocks.Clear();
             GameManager.Data.mapData.RemovePlatforms(this.gameObject);
             GameManager.Data.RemovePlatform = this.gameObject;
         }

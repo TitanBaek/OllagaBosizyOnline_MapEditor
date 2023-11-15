@@ -50,7 +50,6 @@ public class SetBlocks : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDr
             GameManager.Resource.Destroy(dragObject.gameObject);
             dragObject = null;
         }
-        Debug.Log($"{GameManager.Data.mapData.platform_index_name.Count} vs {GameManager.Data.savedMapData.platform_index_name.Count}");
     }
 
     public void SetPlatform(Vector3 blockSettingPosition)
@@ -97,6 +96,7 @@ public class SetBlocks : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDr
         {
             z = eventData.delta.x * Time.deltaTime * 50;
             GameManager.Data.NewPlatform.transform.Rotate(0f, 0f, z, Space.World);
+            GameManager.Data.mapData.ChangePlatformsRotation(GameManager.Data.NewPlatform);
         }
     }
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System;
+using Unity.VisualScripting;
 
 public enum EditMode { Edit, Play };
 public class DataManager : MonoBehaviour
@@ -120,40 +121,36 @@ public class DataManager : MonoBehaviour
         LOAD_FILENAME = fileName;
     }
 
-    public void LoadMaps() // 맵 리스트 갱신
+    public void LoadMaps() // 맵 리스트 갱신 
     { 
         topMostPlatform = null;
         maps = GetMapList();
     }
 
+    // json으로 변환한 현재 맵 데이터와 최근 저장한 맵 데이터가 같은 경우 저장을 진행하지 않음.
+    // 리스트끼리 비교로 수정, json 변환후 비교와 리스트 비교중 부화가 덜한걸로 진행
     public bool CheckMapDatas()
     {
-        bool resultData = false;
+        Debug.Log($"mapDatas {mapData.platform_index_name.Count} {mapData.platform_pos.Count} {mapData.platform_rot.Count}");
+        Debug.Log($"savedmapDatas {savedMapData.platform_index_name.Count} {savedMapData.platform_pos.Count} {savedMapData.platform_rot.Count}");
+        
         if(Enumerable.SequenceEqual(mapData.platform_index_name, savedMapData.platform_index_name) &&
             Enumerable.SequenceEqual(mapData.platform_pos, savedMapData.platform_pos) &&
             Enumerable.SequenceEqual(mapData.platform_rot, savedMapData.platform_rot))
         {
-            resultData = true;
+            return true;
         }
-        return resultData;
+        return false;
+    }
+
+    public void SetGoal()
+    {
+        topMostPlatform = FindTopMostPlatform();
+        SetGoalPlatform(topMostPlatform);
     }
 
     public void SaveMap()
-    {
-        // json으로 변환한 현재 맵 데이터와 최근 저장한 맵 데이터가 같은 경우 저장을 진행하지 않음.
-        // 리스트끼리 비교로 수정, json 변환후 비교와 리스트 비교중 부화가 덜한걸로 진행
-        if (CheckMapDatas())
-        {
-            return;
-        }
-
-        topMostPlatform = FindTopMostPlatform();
-        SetGoalPlatform(topMostPlatform);
-
-        GameManager.Mode.Innit(); // 플레이모드 바꾸기
-
-        return;
-        
+    {                        
         string json = Encrypt(JsonUtility.ToJson(mapData),key128);
         SAVE_FILENAME = $"Custom_MAP_{maps.Length + 1}.json";
         File.WriteAllText($"{SAVE_DATA_DIRECTORY}{SAVE_FILENAME}", json);
@@ -162,6 +159,11 @@ public class DataManager : MonoBehaviour
 
         savedMapData = mapData.MakeSavedMapData();
         LoadMaps();
+
+        GameManager.Data.EditState = EditMode.Edit;
+        GameManager.Mode.Innit(); // 플레이모드 바꾸기
+
+        GameManager.Data.IsTestDone = false;
     }
 
     public void LoadMap(string path = null)
@@ -176,7 +178,9 @@ public class DataManager : MonoBehaviour
         if (currentBlocks.Count >  0)
             ClearMap();
 
+
         mapData = JsonUtility.FromJson<MapData>(loadJson);
+        savedMapData = mapData.MakeSavedMapData();
 
         if (mapData != null)
         {
@@ -189,13 +193,13 @@ public class DataManager : MonoBehaviour
                 innitData.Prefab_Name = mapData.platform_prefab_name[i];
                 innitData.platform_position = mapData.platform_pos[i];
                 innitData.platform_rotate = mapData.platform_rot[i];
+                Debug.Log($"불러온 블럭의 로테이션 값 {innitData.platform_rotate.x} {innitData.platform_rotate.y} {innitData.platform_rotate.z}");
                 GameObject loadedBlock = GameManager.Resource.Instantiate<GameObject>($"Platforms/{mapData.platform_prefab_name[i].Replace("(Clone)", "")}", mapData.platform_pos[i], mapData.platform_rot[i]);
                 Block block = loadedBlock.GetComponent<Block>();
                 loadedBlock.gameObject.name = block.StruckBlockData.index_name;
                 Debug.Log($"맵 데이터 골 여부 : {mapData.platform_isGoal[i]}");
                 block.IsGoal = mapData.platform_isGoal[i];
                 block.InitBlockData(innitData);
-                //block.StruckBlockData.platform_position = new Vector3();
                 currentBlocks.Add(loadedBlock);
             }
         }

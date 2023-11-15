@@ -47,9 +47,10 @@ public class MapData
         platform_rot.Add(block.StruckBlockData.platform_rotate);
         platform_isGoal.Add(block.StruckBlockData.isGoal);
     }
-     
+
     public void ChangePlatformsPosition(GameObject platform)
     {
+        Debug.Log($"{platform.name} 이동");
         // 난수로 되어있는 블럭의 리스트 내 인덱스 찾기
         int index = platform_index_name.IndexOf(platform.gameObject.name);
 
@@ -57,6 +58,20 @@ public class MapData
         Block block = platform.GetComponent<Block>();
         platform_pos[index] = block.StruckBlockData.platform_position;
     }
+
+    public void ChangePlatformsRotation(GameObject platform)
+    {
+        Debug.Log($"{platform.name} 회전");
+        // 난수로 되어있는 블럭의 리스트 내 인덱스 찾기
+        int index = platform_index_name.IndexOf(platform.gameObject.name);
+
+        // StructData 가져오기
+        Block block = platform.GetComponent<Block>();
+        block.InitBlockTransform();
+
+        platform_rot[index] = block.StruckBlockData.platform_rotate;
+    }
+
 
     public void RemovePlatforms(GameObject platform)
     {
