@@ -24,8 +24,6 @@ public class DataManager : MonoBehaviour
     public bool IsTestDone { get { return isTestDone; } set { isTestDone = value; } }
 
     // 저장 불러오기 구현부
-    private bool testComplete;  // 테스트 여부
-    public bool TestComplete { get { return testComplete; } set { testComplete = value; } }
 
     public MapData mapData;                 // 세이브 할 맵 정보를 담을 Mapdata 클래스
     public MapData savedMapData;                // 현재 저장된 MapData
