@@ -15,10 +15,6 @@ public class DataManager : MonoBehaviour
     // 암호화에 사용되는 키
     private string key128;
 
-    // 현재 플레이 씬이 에디터에서 넘어온 테스트 용도인지, 메인메뉴에서 Start를 눌러 넘어온 플레이 용도인지 체크하는 부분
-    private bool isTestMode;
-    public bool IsTestMode { get { return isTestMode; } set { isTestMode = value; } }
-
     // 에디터 모드 
     private EditMode editState;
     public EditMode EditState { get { return editState; } set { editState = value; } }
