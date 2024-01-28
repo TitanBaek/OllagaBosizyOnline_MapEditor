@@ -46,10 +46,6 @@ public class DataManager : MonoBehaviour
     [SerializeField] private bool isEditArea;
     public bool IsEditArea { get { return isEditArea; } set { isEditArea = value; } }
 
-    // 겹치는 블럭 존재여부 구현부
-
-    // 구현예정
-
     // 블럭 설치 및 삭제 구현부
     private string selectedBlock;
     public string SelectedBlock { get { return selectedBlock; } set { selectedBlock = value; } }
@@ -83,6 +79,7 @@ public class DataManager : MonoBehaviour
     {
         selectedBlock = "";
         editState = EditMode.Edit;
+        //key128 = "3CEC2322643FC";
         key128 = "3CEC2322643FC";
         isTestDone = false;
         InitSaveLoadDatas();
@@ -165,12 +162,13 @@ public class DataManager : MonoBehaviour
         if (path.Contains("New Map"))
             return;
 
+        if (currentBlocks.Count > 0)
+            ClearMap();
+
         AllDataClear();
 
         string loadJson = Decrypt(File.ReadAllText(path),key128);
 
-        if (currentBlocks.Count >  0)
-            ClearMap();
 
 
         mapData = JsonUtility.FromJson<MapData>(loadJson);
@@ -241,6 +239,9 @@ public class DataManager : MonoBehaviour
 
     public bool SetGoalPlatform(GameObject platform)
     {
+        if (platform == null)
+            return false;
+
         Block block = platform.GetComponent<Block>();
         if(block == null)
             return false;
@@ -255,7 +256,6 @@ public class DataManager : MonoBehaviour
             Block block = blocks.GetComponent<Block>();
             block.IsGoal = false;
         }
-
     }
 
     public void ClearBlocksRenderer()
@@ -284,7 +284,7 @@ public class DataManager : MonoBehaviour
         selectedBlocks.Clear();
     }
 
-    public static string Decrypt(string textToDecrypt, string key)
+    public string Decrypt(string textToDecrypt, string key)
     {
         RijndaelManaged rijndaelCipher = new RijndaelManaged();
 
@@ -322,7 +322,7 @@ public class DataManager : MonoBehaviour
     }
 
 
-    public static string Encrypt(string textToEncrypt, string key)
+    public string Encrypt(string textToEncrypt, string key)
     {
         RijndaelManaged rijndaelCipher = new RijndaelManaged();
 
@@ -358,5 +358,18 @@ public class DataManager : MonoBehaviour
 
         return Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
     }
+
+    public string Encrypt(string plainText)
+    {
+        byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+        return Convert.ToBase64String(plainTextBytes);
+    }
+
+    public string Decrypt(string base64Text)
+    {
+        byte[] base64Bytes = Convert.FromBase64String(base64Text);
+        return Encoding.UTF8.GetString(base64Bytes);
+    }
+
 
 }

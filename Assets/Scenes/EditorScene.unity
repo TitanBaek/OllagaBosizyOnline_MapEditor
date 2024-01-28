@@ -3770,7 +3770,7 @@ GameObject:
   - component: {fileID: 1384428717}
   - component: {fileID: 1384428719}
   m_Layer: 5
-  m_Name: CamArea
+  m_Name: CamArea_SetArea
   m_TagString: CamArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

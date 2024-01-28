@@ -88,7 +88,7 @@ public class Block : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IPo
             //골인 경우 플레이어가 닿았는지 확인하여 Test모드를 마치며 저장 실행.
             if (collision.gameObject.tag == "Player")
             {
-                // 플레이어의 y 값과 블록의 y 값을 비교하여 
+                // 플레이어의 y 값과 블록의 y 값을 비교하여 플레이어 캐릭터가 이 플랫폼 위에 있다면 .. isTestDone을 True로 
                 if(collision.gameObject.transform.position.y
                     > this.gameObject.transform.position.y)
                 {

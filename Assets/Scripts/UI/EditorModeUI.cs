@@ -32,9 +32,7 @@ public class EditorModeUI : BaseUI
             return;
         }
 
-
         GameManager.Data.SetGoal();
-
 
         // 테스트 여부를 확인하여, 테스트 전이라면 테스트 모드로 돌입
         if (!GameManager.Data.IsTestDone)

@@ -26,15 +26,18 @@ public class SetBlocks : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IDr
 
         GameManager.Data.MousePress = true;
 
-        if (selectedBlock == "")  // 선택된 블럭이 없을 때 클릭한 지점에 반투명 사각 오브젝트 생성
-        {
-            dragObject = GameManager.Resource.Instantiate<DragObject>("UI/DragObject_WithRender", GetPointerPosition(),Quaternion.identity);
-            return;
-        }
-
         if (eventData.button == InputButton.Left)
         {
-            SetPlatform(GetPointerPosition());
+
+            if (selectedBlock == "")  // 선택된 블럭이 없을 때 클릭한 지점에 반투명 사각 오브젝트 생성
+            {
+                dragObject = GameManager.Resource.Instantiate<DragObject>("UI/DragObject_WithRender", GetPointerPosition(), Quaternion.identity);
+                return;
+            }
+            else
+            {
+                SetPlatform(GetPointerPosition());
+            }
         }
     }
 
