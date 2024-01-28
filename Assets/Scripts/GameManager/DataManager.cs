@@ -142,7 +142,7 @@ public class DataManager : MonoBehaviour
 
     public void SaveMap()
     {                        
-        string json = Encrypt(JsonUtility.ToJson(mapData),key128);
+        string json = Encrypt(JsonUtility.ToJson(mapData));
         SAVE_FILENAME = $"Custom_MAP_{maps.Length + 1}.json";
         File.WriteAllText($"{SAVE_DATA_DIRECTORY}{SAVE_FILENAME}", json);
 
@@ -167,7 +167,7 @@ public class DataManager : MonoBehaviour
 
         AllDataClear();
 
-        string loadJson = Decrypt(File.ReadAllText(path),key128);
+        string loadJson = Decrypt(File.ReadAllText(path));
 
 
 
